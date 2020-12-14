@@ -7,7 +7,6 @@ const ticket = require('./ticket');
 app.use(availability);
 app.use(ticket);
 
-app.listen(8000 , () => {
-    console.log('server on port 8000')
-})
-
+app.listen(process.env.PORT || 3000, function(){
+    console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+});
