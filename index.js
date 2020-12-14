@@ -9,7 +9,7 @@ app.use(availability);
 app.use(ticket);
 app.use(exitparking);
 
-app.post('/', (req, res) => {
+app.get('/', (req, res) => {
     res.send("E-PARKING MANAGEMENT SYSTEM API");
     
 })
