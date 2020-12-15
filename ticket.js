@@ -108,7 +108,7 @@ app.post('/ticket/entry', (req, res) => {
     // 15 minute = 900000
     // 1 minute =   60000
     // 1 second =    1000
-    const taksID = setTimeout(() => checkticketverified(ticket_id), 60000)
+    const taksID = setTimeout(() => checkticketverified(ticket_id), 900000)
    }
 
    function checkticketverified(ticket_id){
