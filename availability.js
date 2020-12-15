@@ -22,6 +22,7 @@ app.post('/parkingspot/availability', (req, res) => {
     
 })
 
+
 app.get('/parkingspot/availability/view', (req, res) => {
     let data = [];
     const reff = db.collection('Availability');
@@ -34,6 +35,7 @@ app.get('/parkingspot/availability/view', (req, res) => {
     })
 
 })
+
 
 
 
