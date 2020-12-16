@@ -11,7 +11,28 @@ app.post('/exitparking/scan', (req, res) => {
     let ts = Date.now();
     let time_out = Math.floor(ts/1000);
 
-    function updateavailability(parking_code){
+    function updateavailability(parking_code, exitparking){
+        var time_in = exitparking.time_in;
+        var time_out = exitparking.time_out;
+        var date = exitparking.date;
+        var TIME_IN;
+        var TIME_OUT;
+
+        function timeConverter(UNIX_timestamp_in, UNIX_timestamp_out){
+            var a = new Date(UNIX_timestamp_in * 1000);
+            var hour = a.getHours();
+            var min = a.getMinutes();
+            var sec = a.getSeconds();
+            TIME_IN = hour + ':' + min ;
+
+            var b = new Date(UNIX_timestamp_out * 1000);
+            var hour2 = b.getHours();
+            var min2 = b.getMinutes();
+            TIME_OUT = hour2 + ':' + min2 ;
+
+        }
+        timeConverter(time_in, time_out);
+
         const availability = db.collection('Availability');
         availability.get()
         .then(doc => {
@@ -23,7 +44,7 @@ app.post('/exitparking/scan', (req, res) => {
                         const reffparkingupdate = db.collection('Availability').doc(availability_id);
                         reffparkingupdate.update({status : "available"})
                         .then(()=> {
-                            res.send({status : "ok"});
+                            res.send({status : "ok", date: date, time_in: TIME_IN, time_out: TIME_OUT}); // date, timein,timeout
                         })
                         .catch((err) => {
                             res.send({status : "error", message : err.message})
@@ -62,7 +83,7 @@ app.post('/exitparking/scan', (req, res) => {
             const reff = db.collection('ExitParking').doc();
             reff.set(exitparking)
             .then(() => {
-                updateavailability(parking_code);
+                updateavailability(parking_code, exitparking);
             })
         }
         

@@ -12,6 +12,21 @@ app.post('/ticket/entry/scan', (req, res) => {
     //get current date and time
     let ts = Date.now();
     let time_in = Math.floor(ts/1000)
+    var TIME;
+    timeConverter(time_in);
+    function timeConverter(UNIX_timestamp){
+        var a = new Date(UNIX_timestamp * 1000);
+        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var year = a.getFullYear();
+        var month = months[a.getMonth()];
+        var datee = a.getDate();
+        var hour = a.getHours();
+        var min = a.getMinutes();
+        var sec = a.getSeconds();
+        var DATE = datee + ' ' + month + ' ' + year;
+        TIME = hour + ':' + min ;
+        date = DATE;
+    }
 
     let update = {
         status : "verified",
@@ -22,7 +37,7 @@ app.post('/ticket/entry/scan', (req, res) => {
     const reff = db.collection('Ticket').doc(ticket_id);
         reff.update(update)
         .then( (resp) => {
-            res.send({status : "ok"})
+            res.send({status : "ok", time_in: TIME}) // tambahin time_in
         }).catch((err) => {
             res.send( {status : "error"});
         })
@@ -37,6 +52,7 @@ app.post('/ticket/entry', (req, res) => {
     var license = req.body.license;
     var status = "unverified";
     var availability_id;
+    var TIME;
 
     //get current date and time
     let ts = Date.now();
@@ -53,7 +69,7 @@ app.post('/ticket/entry', (req, res) => {
         var min = a.getMinutes();
         var sec = a.getSeconds();
         var DATE = datee + ' ' + month + ' ' + year;
-        var TIME = hour + ':' + min ;
+        TIME = hour + ':' + min ;
         date = DATE;
     }
     updateavailability();
@@ -98,7 +114,7 @@ app.post('/ticket/entry', (req, res) => {
         reff.set(data)
         .then( () => {
             tickettimeout(reff.id);
-            res.send({ticket_id : reff.id, status: "ok"});
+            res.send({ticket_id : reff.id, status: "ok", time_in: TIME}); // tambahin created_time
         }).catch((err) => {
             res.send(err);
         })
